@@ -116,7 +116,7 @@ float MD25MotorController::getMotorTwoCurrent() const
   return static_cast<float>(*reinterpret_cast<int8_t*>(&current)/10.0f);
 }
 
-int MD25MotorController::stopMotors() const
+int MD25MotorController::stop() const
 {  
   switch(this->mode)
   {

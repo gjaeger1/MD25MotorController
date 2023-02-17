@@ -39,7 +39,7 @@ class MD25MotorController
     int setSpeed(const uint8_t speed) const;
     int setSpeedMotorOne(const uint8_t speed) const;
     int setSpeedMotorTwo(const uint8_t speed) const;
-    int stopMotors() const;
+    int stop() const;
     int setTurning(const uint8_t turning) const;
     
     float getBatteryVolts() const;
