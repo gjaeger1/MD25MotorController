@@ -5,8 +5,20 @@
 
 class MD25MotorController
 {
+
+  public:
+    enum Modes
+    {
+      INDIVIDUAL_128_STOP = 0, 
+      INDIVIDUAL_0_STOP = 1,
+      COMBINED_128_STOP = 2,
+      COMBINED_0_STOP = 3
+    };
+
+  private: 
+  
   uint8_t acceleration_limit = 10;  // highest possible acceleration
-  uint8_t mode = 1;                 // Speed1 sets speeds for both motors, Speed2 is the turn value
+  uint8_t mode = Modes::COMBINED_0_STOP;                 // Speed1 sets speeds for both motors, Speed2 is the turn value
   i2c_inst_t* i2c_instance = i2c_default;
   
   public:
