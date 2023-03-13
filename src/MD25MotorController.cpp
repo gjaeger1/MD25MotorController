@@ -51,7 +51,7 @@ int MD25MotorController::begin()
 
 uint8_t MD25MotorController::getSoftwareRevisionNumber() const
 { // Function that gets the software version
-  
+
   uint8_t software;
   this->read_registers(SOFTWAREREG, &software, 1);
   return(software);
@@ -75,7 +75,7 @@ uint32_t MD25MotorController::getEncoderOne() const
   pos += data[2];                                     // Third byte for encoder 1, LH
   pos <<= 8;
   pos += data[3];                                     // Fourth byte for encoder 1, LL
-  
+
   return(pos);
 }
 
@@ -91,45 +91,45 @@ uint32_t MD25MotorController::getEncoderTwo() const
   pos += data[2];                                     // Third byte for encoder 1, LH
   pos <<= 8;
   pos += data[3];                                     // Fourth byte for encoder 1, LL
-  
+
   return(pos);
 }
 
 float MD25MotorController::getBatteryVolts() const
 {
   uint8_t volts;
-  this->read_registers(VOLTREAD, &volts, 1);  
+  this->read_registers(VOLTREAD, &volts, 1);
   return static_cast<float>(*reinterpret_cast<int8_t*>(&volts)/10.0f);
 }
 
 float MD25MotorController::getMotorOneCurrent() const
 {
   uint8_t current;
-  this->read_registers(MOTORCURRENTONE, &current, 1);  
+  this->read_registers(MOTORCURRENTONE, &current, 1);
   return static_cast<float>(*reinterpret_cast<int8_t*>(&current)/10.0f);
 }
 
 float MD25MotorController::getMotorTwoCurrent() const
 {
   uint8_t current;
-  this->read_registers(MOTORCURRENTTWO, &current, 1);  
+  this->read_registers(MOTORCURRENTTWO, &current, 1);
   return static_cast<float>(*reinterpret_cast<int8_t*>(&current)/10.0f);
 }
 
 int MD25MotorController::stop() const
-{  
+{
   switch(this->mode)
   {
-    case 0:
+    case Modes::INDIVIDUAL_128_STOP:
     {
       uint8_t data1[2] = {SPEED1, 128}; // Sends a value of 128 to motor 1 this value stops the motor
       return_on_error(this->write_registers(data1, 2));
-      
+
       uint8_t data2[2] = {SPEED2, 128}; // Sends a value of 128 to motor 2 this value stops the motor
       return_on_error(this->write_registers(data2, 2));
       break;
     }
-    case 1:
+    case Modes::INDIVIDUAL_0_STOP:
     {
       uint8_t data1[2] = {SPEED1, 0}; // Sends a value of 0 to motor 1 this value stops the motor
       return_on_error(this->write_registers(data1, 2));
@@ -137,7 +137,7 @@ int MD25MotorController::stop() const
       return_on_error(this->write_registers(data2, 2));
       break;
     }
-    case 2:
+    case Modes::COMBINED_128_STOP:
     {
       uint8_t data1[2] = {SPEED1, 128}; // both motors stop
       return_on_error(this->write_registers(data1, 2));
@@ -145,7 +145,7 @@ int MD25MotorController::stop() const
       return_on_error(this->write_registers(data2, 2));
       break;
     }
-    case 3:
+    case Modes::COMBINED_0_STOP:
     {
       uint8_t data1[2] = {SPEED1, 0}; // both motors stop
       return_on_error(this->write_registers(data1, 2));
@@ -159,7 +159,7 @@ int MD25MotorController::stop() const
   }
 
   return 0;
-}  
+}
 
 int MD25MotorController::setAccelerationRate(const uint8_t accel)
 {
@@ -168,7 +168,7 @@ int MD25MotorController::setAccelerationRate(const uint8_t accel)
   this->acceleration_limit = accel;
   return 0;
 }
-  
+
 int MD25MotorController::setMode(const uint8_t m)
 {
   uint8_t data[2] = {MODE_REG, m}; // no turning
@@ -176,22 +176,22 @@ int MD25MotorController::setMode(const uint8_t m)
   this->mode = m;
   return 0;
 }
-    
+
 int MD25MotorController::setSpeed(const uint8_t speed) const
 {
   switch(this->mode)
   {
-    case(0):
-    case(1):
+    case(Modes::INDIVIDUAL_128_STOP):
+    case(Modes::INDIVIDUAL_0_STOP):
     {
-      uint8_t data1[2] = {SPEED1, speed}; 
+      uint8_t data1[2] = {SPEED1, speed};
       this->write_registers(data1, 2);
-      uint8_t data2[2] = {SPEED2, speed}; 
+      uint8_t data2[2] = {SPEED2, speed};
       this->write_registers(data2, 2);
       break;
     }
-    case(2):
-    case(3):
+    case(Modes::COMBINED_128_STOP):
+    case(Modes::COMBINED_0_STOP):
     {
       uint8_t data[2] = {SPEED1, speed}; // set for both motors
       this->write_registers(data, 2);
@@ -218,18 +218,18 @@ int MD25MotorController::setSpeedMotorTwo(const uint8_t speed) const
   return_on_error(this->write_registers(data, 2));
   return 0;
 }
-    
+
 int MD25MotorController::setTurning(const uint8_t turning) const
 {
   switch(this->mode)
   {
-    case(0):
-    case(1):
+    case(Modes::INDIVIDUAL_128_STOP):
+    case(Modes::INDIVIDUAL_0_STOP):
     {
       break;
     }
-    case(2):
-    case(3):
+    case(Modes::COMBINED_128_STOP):
+    case(Modes::COMBINED_0_STOP):
     {
       uint8_t data[2] = {SPEED2, turning}; // set for both motors
       this->write_registers(data, 2);
