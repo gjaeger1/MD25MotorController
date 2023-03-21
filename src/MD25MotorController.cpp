@@ -63,7 +63,7 @@ int MD25MotorController::resetEncoders() const
   return_check_error(this->write_registers(data, 2))
 }
 
-uint32_t MD25MotorController::getEncoderOne() const
+long MD25MotorController::getEncoderOne() const
 {
   uint8_t data[4];
   this->read_registers(ENCODERONE, data, 4);
@@ -79,7 +79,7 @@ uint32_t MD25MotorController::getEncoderOne() const
   return(pos);
 }
 
-uint32_t MD25MotorController::getEncoderTwo() const
+long MD25MotorController::getEncoderTwo() const
 {
   uint8_t data[4];
   this->read_registers(ENCODERTWO, data, 4);
