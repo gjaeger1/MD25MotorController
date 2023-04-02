@@ -1,7 +1,6 @@
 project(MD25MotorController C CXX)
 add_library(MD25MotorController INTERFACE)
 target_sources(MD25MotorController INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/MD25MotorController.cpp
         )
 target_include_directories(MD25MotorController INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
