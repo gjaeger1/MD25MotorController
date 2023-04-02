@@ -1,8 +1,6 @@
 #pragma once
 
-#include "pico/binary_info.h"
-#include "hardware/i2c.h"
-
+template<typename I2CDeviceType>
 class MD25MotorController
 {
 
@@ -19,10 +17,11 @@ class MD25MotorController
 
   uint8_t acceleration_limit = 10;  // highest possible acceleration
   uint8_t mode = Modes::COMBINED_0_STOP;                 // Speed1 sets speeds for both motors, Speed2 is the turn value
-  i2c_inst_t* i2c_instance = i2c_default;
+  std::shared_ptr<I2CDeviceType> i2c_dev;
+  
 
   public:
-    MD25MotorController(i2c_inst_t* dev = i2c_default) : i2c_instance(dev) {}
+    MD25MotorController(const std::shared_ptr<I2CDeviceType> dev) : i2c_dev(dev) {}
 
     int begin();
 

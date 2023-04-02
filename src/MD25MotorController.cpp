@@ -22,7 +22,7 @@
 
 int MD25MotorController::write_registers(const uint8_t* data, const std::size_t num) const
 {
-  if(i2c_write_blocking_until(this->i2c_instance, MD25ADDRESS, data, num, false, delayed_by_ms(get_absolute_time(), 150)) < 0)
+  if(this->i2c_dev->send_bytes_blocking(MD25ADDRESS, data, num, false) < 0)
     return -1;
 
   return 0;
@@ -30,10 +30,10 @@ int MD25MotorController::write_registers(const uint8_t* data, const std::size_t 
 
 int MD25MotorController::read_registers(const uint8_t register_address, uint8_t* data, const std::size_t num) const
 {
-  if(i2c_write_blocking_until(this->i2c_instance, MD25ADDRESS, &register_address, sizeof(uint8_t), true, delayed_by_ms(get_absolute_time(), 150)) < 0)
+  if(this->i2c_dev->receive_bytes_blocking(MD25ADDRESS, &register_address, sizeof(uint8_t), true) < 0)
     return -1;
 
-  if(i2c_read_blocking_until(this->i2c_instance, MD25ADDRESS, data, (uint8_t) num, false, delayed_by_ms(get_absolute_time(), 150)) < 0)
+  if(this->i2c_dev->receive_bytes_blocking(MD25ADDRESS, data, (uint8_t) num, false) < 0)
     return -1;
 
   return 0;
