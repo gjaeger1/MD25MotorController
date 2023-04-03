@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <memory>
 
-
-
 #define CMD_REG             0x10u                        // Values of 0 eing sent using write have to be cast as a byte to stop them being misinterperted as NULL
                                                               // This is a but with arduino 1
 #define MD25ADDRESS         0x58u                              // Address of the MD25
@@ -23,8 +21,6 @@
 
 #define return_on_error(a) if(a<0) return -1;
 #define return_check_error(a) if(a<0){return -1;}else{return 0;}
-
-
 
 template<typename I2CDeviceType>
 class MD25MotorController
@@ -272,7 +268,7 @@ class MD25MotorController
 
     int read_registers(const uint8_t register_address, uint8_t* data, const std::size_t num) const
     {
-      if(this->i2c_dev->receive_bytes_blocking(MD25ADDRESS, &register_address, sizeof(uint8_t), true) < 0)
+      if(this->i2c_dev->send_bytes_blocking(MD25ADDRESS, &register_address, sizeof(uint8_t), true) < 0)
         return -1;
 
       if(this->i2c_dev->receive_bytes_blocking(MD25ADDRESS, data, (uint8_t) num, false) < 0)
