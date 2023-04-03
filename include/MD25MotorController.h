@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <memory>
 
-
-
 #define CMD_REG             0x10u                        // Values of 0 eing sent using write have to be cast as a byte to stop them being misinterperted as NULL
                                                               // This is a but with arduino 1
 #define MD25ADDRESS         0x58u                              // Address of the MD25
@@ -23,8 +21,6 @@
 
 #define return_on_error(a) if(a<0) return -1;
 #define return_check_error(a) if(a<0){return -1;}else{return 0;}
-
-
 
 template<typename I2CDeviceType>
 class MD25MotorController
