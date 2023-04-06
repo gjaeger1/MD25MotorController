@@ -9,7 +9,7 @@ list(APPEND DEPS foundation-logging)
 
 if(NOT ADMORPH_PLATFORM STREQUAL "posix")
     # we have a RP2040 platform
-    list(APPEND DEPS pico_stdlib pico_multicore hardware_i2c hardware_irq i2c_slave)
+    list(APPEND DEPS pico_stdlib pico_multicore hardware_i2c hardware_irq)
 
     if(PICO_BOARD STREQUAL "pico_w")
         # we have pico_w
